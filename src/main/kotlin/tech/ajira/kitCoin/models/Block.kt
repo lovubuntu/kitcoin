@@ -18,7 +18,12 @@ data class Block(
   val previousHash: String = ""
 ) {
 
-  fun hash(): String = ""
+  fun hash(): String {
+    val bytes = this.toString().toByteArray()
+    val md = MessageDigest.getInstance("SHA-256")
+    val digest = md.digest(bytes)
+    return digest.fold("", { str, it -> str + "%02x".format(it) })
+  }
 
   override fun toString(): String {
     return """{
@@ -30,5 +35,23 @@ data class Block(
       |}""".trimMargin()
   }
 
-  fun validate(): Boolean = false
+  fun validate(): Boolean = this.hash().substring(0, 2) == "00"
+
+  class Deserializer : ResponseDeserializable<Block> {
+    override fun deserialize(reader: Reader) = Gson().fromJson(reader, Block::class.java)
+  }
+
+  class ListDeserializer : ResponseDeserializable<ArrayList<Block>> {
+    override fun deserialize(reader: Reader): ArrayList<Block> {
+
+      val builder = GsonBuilder()
+
+      // Register an adapter to manage the date types as long values
+      builder.registerTypeAdapter(Date::class.java, JsonDeserializer<Date> { json, typeOfT, context -> Date(json.asJsonPrimitive.asLong) })
+
+      val gson = builder.create()
+      val type = object : TypeToken<ArrayList<Block>>() {}.type
+      return gson.fromJson(reader, type)
+    }
+  }
 }
