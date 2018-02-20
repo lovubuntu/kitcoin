@@ -1,9 +1,7 @@
 # kitcoin
 BlockChain implementation using Kotlin
 
-Sample implementation of blockchain using Kotlin for [Hack&Learn
-Session](https://www.meetup.com/Hack-Learn/events/245136363/) in
-[Ajira](http://www.ajira.tech/).
+Sample implementation of blockchain using Kotlin for [Hack&Learn Session](https://www.meetup.com/Hack-Learn/events/245136363/) in [Ajira](http://www.ajira.tech/).
 
 
 NOTE: This is not an actual digital currency. This software can not be
